@@ -5,12 +5,16 @@ export const HomeContainer = styled('main', {
   display: 'flex',
   width: '100%',
   minHeight: 656,
-  //maxWidth: 'calc(100vw - ((100vw - 1232px) / 2))',
-  //marginLeft: '20rem',
   overflowX: 'hidden',
+
+  a: {
+    '&:first-child': {
+      marginLeft: '-12rem',
+    }
+  }
 })
 
-export const Product = styled('a', {
+export const Product = styled('div', {
   background: 'linear-gradient(180deg, #1EA483 0%, #7465D4 100%)',
   boxShadow: '0px 0px 48px rgba(0, 0, 0, 0.9)',
   borderRadius: 8,
@@ -45,7 +49,8 @@ export const Product = styled('a', {
     transition: 'all 0.2s ease-in-out',
 
     'strong': {
-      fontSize: '$lg'
+      fontSize: '$lg',
+      color: '$gray100',
     },
 
     span: {
@@ -61,10 +66,6 @@ export const Product = styled('a', {
       opacity: 1,
     }
   },
-
-  '&:first-child': {
-    marginLeft: '-12rem',
-  }
 })
 
 export const ArrowButton = styled('button', {

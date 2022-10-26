@@ -2,12 +2,12 @@ import { ArrowButton, HomeContainer, Product } from "../styles/pages/home";
 import { useKeenSlider } from 'keen-slider/react'
 import 'keen-slider/keen-slider.min.css'
 
-import camisaImg from '../assets/camisa.png'
 import Image from "next/image";
 import { useState } from "react";
-import { GetServerSideProps, GetStaticProps } from "next";
+import { GetStaticProps } from "next";
 import { stripe } from "../lib/stripe";
 import Stripe from "stripe";
+import Link from "next/link";
 
 interface ArrowProps {
   left?: boolean
@@ -71,21 +71,24 @@ export default function Home({ products }: HomeProps) {
     <HomeContainer ref={sliderRef} className="keen-slider">
       {products.map(product => {
         return (
-          <Product key={product.id} className="keen-slider__slide">
-            <Image 
-              src={product.imageUrl}
-              alt=""
-              width={520}
-              height={480}
-              placeholder="blur" 
-              blurDataURL={product.imageUrl}
-            />
-    
-            <footer>
-              <strong>{product.name}</strong>
-              <span>{product.price}</span>
-            </footer>
-          </Product>
+          <Link href={`/product/${product.id}`} key={product.id}>
+            <Product className="keen-slider__slide">
+              <Image 
+                src={product.imageUrl}
+                alt=""
+                width={520}
+                height={480}
+                placeholder="blur" 
+                blurDataURL={product.imageUrl}
+              />
+
+              <footer>
+                <strong>{product.name}</strong>
+                <span>{product.price}</span>
+              </footer>
+            </Product>
+          </Link>
+
         )
       })}
 
