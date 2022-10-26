@@ -1,14 +1,12 @@
-import { basename } from "path";
 import { styled } from "..";
 
 export const HomeContainer = styled('main', {
   paddingLeft: '2rem',
   display: 'flex',
-  gap: '3rem',
   width: '100%',
   minHeight: 656,
-  maxWidth: 'calc(100vw - ((100vw - 1232px) / 2))',
-  marginLeft: 'auto',
+  //maxWidth: 'calc(100vw - ((100vw - 1232px) / 2))',
+  //marginLeft: '20rem',
   overflowX: 'hidden',
 })
 
@@ -62,5 +60,50 @@ export const Product = styled('a', {
       transform: 'translateY(0%)',
       opacity: 1,
     }
+  },
+
+  '&:first-child': {
+    marginLeft: '-12rem',
   }
+})
+
+export const ArrowButton = styled('button', {
+  position: "absolute",
+  top: "50%",
+  transform: "translateY(-50%)",
+  width: "8.5rem",
+  height: "100%",
+  background: "linear-gradient(270deg, rgba(18, 18, 20, 0) 0%, rgba(18, 18, 20, 0.75) 100%)",
+  cursor: "pointer",
+  border: "none",
+  outline: "none",
+  color: "$white",
+  fill: "$white",
+  padding: "0 1rem",
+
+  'svg:hover': {
+    transform: "scale(1.1)",
+    transition: "all 0.2s"
+  },
+
+  variants: {
+      direction: {
+          left: {
+              left: 0,
+              textAlign: "left",
+          },
+          right: {
+              right: 0,
+              textAlign: "right",
+              background:
+                  "linear-gradient(90deg, rgba(18, 18, 20, 0) 0%, rgba(18, 18, 20, 0.75) 100%)",
+          },
+      },
+      disabled: {
+          true: {
+              opacity: 0,
+              display: 0,
+          },
+      },
+  },
 })
