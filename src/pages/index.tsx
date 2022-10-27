@@ -8,6 +8,7 @@ import { GetStaticProps } from "next";
 import { stripe } from "../lib/stripe";
 import Stripe from "stripe";
 import Link from "next/link";
+import Head from "next/head";
 
 interface ArrowProps {
   left?: boolean
@@ -68,53 +69,59 @@ export default function Home({ products }: HomeProps) {
   }
 
   return (
-    <HomeContainer ref={sliderRef} className="keen-slider">
-      {products.map(product => {
-        return (
-          <Link href={`/product/${product.id}`} key={product.id} prefetch={false}>
-            <Product className="keen-slider__slide">
-              <Image 
-                src={product.imageUrl}
-                alt=""
-                width={520}
-                height={480}
-                placeholder="blur" 
-                blurDataURL={product.imageUrl}
+    <>
+      <Head>
+        <title>Home | Ignite Shop</title>
+      </Head>
+
+      <HomeContainer ref={sliderRef} className="keen-slider">
+        {products.map(product => {
+          return (
+            <Link href={`/product/${product.id}`} key={product.id} prefetch={false}>
+              <Product className="keen-slider__slide">
+                <Image 
+                  src={product.imageUrl}
+                  alt=""
+                  width={520}
+                  height={480}
+                  placeholder="blur" 
+                  blurDataURL={product.imageUrl}
+                />
+
+                <footer>
+                  <strong>{product.name}</strong>
+                  <span>{product.price}</span>
+                </footer>
+              </Product>
+            </Link>
+
+          )
+        })}
+
+          {loaded && instanceRef.current && (
+            <>
+              <Arrow
+                left
+                onClick={(e) =>
+                  e.stopPropagation() || instanceRef.current?.prev()
+                }
+                disabled={currentSlide === 0}
               />
 
-              <footer>
-                <strong>{product.name}</strong>
-                <span>{product.price}</span>
-              </footer>
-            </Product>
-          </Link>
-
-        )
-      })}
-
-        {loaded && instanceRef.current && (
-          <>
-            <Arrow
-              left
-              onClick={(e) =>
-                e.stopPropagation() || instanceRef.current?.prev()
-              }
-              disabled={currentSlide === 0}
-            />
-
-            <Arrow
-              onClick={(e) =>
-                e.stopPropagation() || instanceRef.current?.next()
-              }
-              disabled={
-                currentSlide ===
-                instanceRef.current.track.details.slides.length - 1
-              }
-            />
-          </>
-        )
-      }
-    </HomeContainer>
+              <Arrow
+                onClick={(e) =>
+                  e.stopPropagation() || instanceRef.current?.next()
+                }
+                disabled={
+                  currentSlide ===
+                  instanceRef.current.track.details.slides.length - 1
+                }
+              />
+            </>
+          )
+        }
+      </HomeContainer>
+    </>
   )
 }
 
