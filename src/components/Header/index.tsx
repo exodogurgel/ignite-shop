@@ -1,19 +1,31 @@
 import logoImg from "../../assets/logo.svg"
-import { CartContainer, HeaderContainer } from "./styles"
+import { BagContainer, HeaderContainer } from "./styles"
 import Image from "next/image"
 import { Handbag } from "phosphor-react"
 
+import * as Dialog from '@radix-ui/react-dialog'
+import ShoppingBag from "../ShoppingBag"
+
 export default function Header () {
-  const cartItems=["1"] 
+  const bagItems=["1"] 
+  const bagIsNotEmpty = bagItems.length > 0
   
   return (
     <HeaderContainer>
       <Image src={logoImg} alt="" />
       
-      <CartContainer>
-        <Handbag size={24} weight="bold" color={cartItems.length > 0 ? '#FFF': '#8D8D99'}/>
-        {cartItems.length > 0 && <span>{cartItems.length}</span>}
-      </CartContainer>
+       <Dialog.Root>
+        <BagContainer>
+          <Handbag 
+            size={24} 
+            weight="bold" 
+            color={bagIsNotEmpty ? '#FFF': '#8D8D99'}
+          />
+          {bagIsNotEmpty && <span>{bagItems.length}</span>}
+        </BagContainer>
+
+        <ShoppingBag/>
+      </Dialog.Root>  
     </HeaderContainer>
   )
 }
