@@ -3,8 +3,51 @@ import { X } from 'phosphor-react'
 import { Close, Content, ImageContainer, Item, ItemsContainer, Title, } from './styles'
 import Image from 'next/image'
 import camiseta from '../../assets/camisa.png'
+import axios from "axios";
+
+import { useShoppingCart, formatCurrencyString } from 'use-shopping-cart'
+import { Product as IProduct } from "use-shopping-cart/core"
+import { useState } from 'react'
 
 export default function ShoppingBag () {
+  const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] = useState(false)
+  
+  const { cartDetails, removeItem, cartCount, formattedTotalPrice, clearCart } = useShoppingCart()
+
+  const cart = Object.values(cartDetails ?? {}).map((cartItem: IProduct) => cartItem)
+
+  const isCartEmpty = cartCount === 0
+
+  function handleRemoveItem (id: string) {
+    removeItem(id)
+  }
+
+  async function handleBuyProducts() {
+    const productsToCheckout = cart.map((cartItem) => {
+      return {
+        price: cartItem.price_id,
+        quantity: cartItem.quantity,
+      }
+    })
+
+    try {
+      setIsCreatingCheckoutSession(true)
+
+      const response = await axios.post('/api/checkout', {
+        products: productsToCheckout
+      })
+
+      const { checkoutUrl } = response.data
+
+      window.location.href = checkoutUrl
+      clearCart()
+
+    } catch  (err){
+      setIsCreatingCheckoutSession(false)
+
+      alert('Falha ao redirecionar ao checkout')
+    }
+  }
 
   return (
     <Dialog.Portal>
@@ -13,63 +56,49 @@ export default function ShoppingBag () {
         <Close> <X size={24} weight="bold"/> </Close>
         <Title>Sacola de compras</Title>
         <ItemsContainer>
-          <Item>
-            <ImageContainer>
-              <Image 
-                src={camiseta}
-                alt=""
-                width={95}
-                height={95}
-              />
-            </ImageContainer>
-            <div>
-              <h4>Camiseta Beyond the Limits</h4>
-              <strong>R$ 79,90</strong>
-              <button>Remover</button>
-            </div>
-          </Item>
-          <Item>
-            <ImageContainer>
-              <Image 
-                src={camiseta}
-                alt=""
-                width={95}
-                height={95}
-              />
-            </ImageContainer>
-            <div>
-              <h4>Camiseta Beyond the Limits</h4>
-              <strong>R$ 79,90</strong>
-              <button>Remover</button>
-            </div>
-          </Item>
-          <Item>
-            <ImageContainer>
-              <Image 
-                src={camiseta}
-                alt=""
-                width={95}
-                height={95}
-              />
-            </ImageContainer>
-            <div>
-              <h4>Camiseta Beyond the Limits</h4>
-              <strong>R$ 79,90</strong>
-              <button>Remover</button>
-            </div>
-          </Item>
+          {cart.map(cartItem => (
+            <Item key={cartItem.id}>
+              <ImageContainer>
+                <Image 
+                  src={cartItem.imageUrl}
+                  alt=""
+                  width={95}
+                  height={95}
+                />
+              </ImageContainer>
+              <div>
+                <h4>{cartItem.name}</h4>
+                <strong>
+                  {
+                    formatCurrencyString(
+                      {
+                        value: cartItem.price,
+                        currency: cartItem.currency
+                      }
+                    )
+                  }
+                </strong>
+                <button onClick={() => handleRemoveItem(cartItem.id)}>Remover</button>
+              </div>
+            </Item>
+          ))}
         </ItemsContainer>
         <footer>
           <div>
             <span>Quantidade</span>
-            <span>3 itens</span>
+            <span>{cartCount} {cartCount > 1 ? 'itens' : 'item'}</span>
           </div>
           <div>
             <span>Valor total</span>
-            <strong>R$ 270,00</strong>
+            <strong>{formattedTotalPrice}</strong>
           </div>
           
-          <button>Finalizar compra</button>
+          <button 
+            disabled={isCreatingCheckoutSession || isCartEmpty} 
+            onClick={handleBuyProducts}
+          >
+            Finalizar compra
+          </button>
         </footer>
       </Content>
     </Dialog.Portal>

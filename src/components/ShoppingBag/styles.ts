@@ -74,7 +74,7 @@ export const Content = styled(Dialog.Content, {
       cursor: 'pointer',
       transition: 'background-color 0.2s',
 
-      disabled: {
+      '&:disabled': {
         opacity: 0.6,
         cursor: 'not-allowed',
       },

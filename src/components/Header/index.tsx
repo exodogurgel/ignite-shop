@@ -5,10 +5,10 @@ import { Handbag } from "phosphor-react"
 
 import * as Dialog from '@radix-ui/react-dialog'
 import ShoppingBag from "../ShoppingBag"
+import { useShoppingCart } from "use-shopping-cart"
 
 export default function Header () {
-  const bagItems=["1"] 
-  const bagIsNotEmpty = bagItems.length > 0
+  const { cartCount } = useShoppingCart()
   
   return (
     <HeaderContainer>
@@ -19,9 +19,9 @@ export default function Header () {
           <Handbag 
             size={24} 
             weight="bold" 
-            color={bagIsNotEmpty ? '#FFF': '#8D8D99'}
+            color={cartCount ? '#FFF': '#8D8D99'}
           />
-          {bagIsNotEmpty && <span>{bagItems.length}</span>}
+          {cartCount && <span>{cartCount}</span>}
         </BagContainer>
 
         <ShoppingBag/>
