@@ -2,6 +2,8 @@ import { ArrowButton, HomeContainer, Product } from "../styles/pages/home";
 import { useKeenSlider } from 'keen-slider/react'
 import 'keen-slider/keen-slider.min.css'
 
+import { useShoppingCart } from "use-shopping-cart"
+
 import Image from "next/image";
 import { useState } from "react";
 import { GetStaticProps } from "next";
@@ -23,12 +25,16 @@ interface HomeProps {
     name: string
     imageUrl: string
     price: string
+    defaultPriceId: string
+    priceInCents: number
   }[]
 }
 
 export default function Home({ products }: HomeProps) {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [loaded, setLoaded] = useState(false)
+
+  const { addItem } = useShoppingCart()
 
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
     slides: {
@@ -78,8 +84,8 @@ export default function Home({ products }: HomeProps) {
       <HomeContainer ref={sliderRef} className="keen-slider">
         {products.map(product => {
           return (
-            <Link href={`/product/${product.id}`} key={product.id} prefetch={false}>
-              <Product className="keen-slider__slide">
+            <Product  key={product.id} className="keen-slider__slide">
+              <Link href={`/product/${product.id}`} prefetch={false}>
                 <Image 
                   src={product.imageUrl}
                   alt=""
@@ -88,16 +94,27 @@ export default function Home({ products }: HomeProps) {
                   placeholder="blur" 
                   blurDataURL={product.imageUrl}
                 />
-
+              </Link>
                 <footer>
                   <div>
                     <strong>{product.name}</strong>
                     <span>{product.price}</span>
                   </div>
-                  <button><Handbag size={32} weight="bold"/> </button>
+                  <button
+                    onClick={() => {
+                      addItem({
+                        id: product.id,
+                        name: product.name,
+                        imageUrl: product.imageUrl,
+                        price: Number(product.priceInCents),
+                        currency: "BRL"
+                      })
+                    }}
+                  >
+                    <Handbag size={32} weight="bold"
+                  /> </button>
                 </footer>
               </Product>
-            </Link>
 
           )
         })}
@@ -144,7 +161,9 @@ export const getStaticProps: GetStaticProps = async () => {
       price: new Intl.NumberFormat('pt-BR', {
         style: 'currency',
         currency: 'BRL',
-      }).format(price.unit_amount / 100)
+      }).format(price.unit_amount / 100),
+      priceInCents: price.unit_amount,
+      defaultPriceId: price.id
     }
   })
 

@@ -7,7 +7,7 @@ export const HomeContainer = styled('main', {
   minHeight: 656,
   overflowX: 'hidden',
 
-  a: {
+  '> div': {
     '&:first-child': {
       marginLeft: '-12rem',
     }
@@ -24,6 +24,7 @@ export const Product = styled('div', {
   alignItems: 'center',
   justifyContent: 'center',
   cursor: 'pointer',
+
   overflow: 'hidden',
   position: 'relative',
 
@@ -39,6 +40,8 @@ export const Product = styled('div', {
     right: '0.25rem',
     borderRadius: 6,
     backgroundColor: 'rgba(0, 0, 0, 0.6)', 
+
+    cursor: 'auto',
 
     display: 'flex',
     justifyContent: 'space-between',
