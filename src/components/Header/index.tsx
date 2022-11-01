@@ -21,7 +21,7 @@ export default function Header () {
             weight="bold" 
             color={cartCount ? '#FFF': '#8D8D99'}
           />
-          {cartCount && <span>{cartCount}</span>}
+          {cartCount > 0 && <span>{cartCount}</span>}
         </BagContainer>
 
         <ShoppingBag/>

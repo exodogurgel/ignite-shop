@@ -2,7 +2,6 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { X } from 'phosphor-react'
 import { Close, Content, ImageContainer, Item, ItemsContainer, Title, } from './styles'
 import Image from 'next/image'
-import camiseta from '../../assets/camisa.png'
 import axios from "axios";
 
 import { useShoppingCart, formatCurrencyString } from 'use-shopping-cart'
@@ -12,7 +11,7 @@ import { useState } from 'react'
 export default function ShoppingBag () {
   const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] = useState(false)
   
-  const { cartDetails, removeItem, cartCount, formattedTotalPrice, clearCart } = useShoppingCart()
+  const { cartDetails, removeItem, cartCount, formattedTotalPrice } = useShoppingCart()
 
   const cart = Object.values(cartDetails ?? {}).map((cartItem: IProduct) => cartItem)
 
@@ -40,7 +39,6 @@ export default function ShoppingBag () {
       const { checkoutUrl } = response.data
 
       window.location.href = checkoutUrl
-      clearCart()
 
     } catch  (err){
       setIsCreatingCheckoutSession(false)

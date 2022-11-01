@@ -1,12 +1,13 @@
 import Image from "next/image";
 import { ImageContainer, SuccessContainer } from "../styles/pages/success";
 
-import camisetaImg from '../assets/camisa.png'
 import Link from "next/link";
 import { GetServerSideProps } from "next";
 import { stripe } from "../lib/stripe";
 import Stripe from "stripe";
 import Head from "next/head";
+import { useShoppingCart } from "use-shopping-cart"
+import { useEffect, useState } from "react";
 
 interface SuccessProps {
   customerName: string
@@ -17,6 +18,15 @@ interface SuccessProps {
 }
 
 export default function Success({ customerName, product }: SuccessProps) {
+  const [successfulPurchase, setSuccessfulPurchase] = useState(true)
+
+  const { clearCart } = useShoppingCart()
+
+  if (successfulPurchase) {
+    clearCart()
+    setSuccessfulPurchase(false)
+  }
+  
   return (
     <>
       <Head>
