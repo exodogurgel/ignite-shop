@@ -106,7 +106,8 @@ export default function Home({ products }: HomeProps) {
                         id: product.id,
                         name: product.name,
                         imageUrl: product.imageUrl,
-                        price: Number(product.priceInCents),
+                        price: product.priceInCents,
+                        price_id: product.defaultPriceId,
                         currency: "BRL"
                       })
                     }}
