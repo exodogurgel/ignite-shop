@@ -46,11 +46,6 @@ export default function Home({ products }: HomeProps) {
   const cart = Object.values(cartDetails ?? {}).map((cartItem: IProduct) => cartItem)
 
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
-    slides: {
-      perView: 2.2,
-      spacing: 48,
-      origin: 'center',
-    },
     initial: 0,
     slideChanged(slider) {
         setCurrentSlide(slider.track.details.rel);
@@ -58,6 +53,22 @@ export default function Home({ products }: HomeProps) {
     created() {
         setLoaded(true);
     },
+    breakpoints: {
+      "(min-width: 876px)": {
+        slides: {
+          perView: 2.2,
+          spacing: 48,
+          origin: 'center',
+        }
+      },
+      "(max-width: 500px)": {
+        slides: {
+          perView: 1,
+          spacing: 44,
+          origin: 'auto',
+        }
+      }
+    }
   })
 
   function Arrow(props: ArrowProps) {

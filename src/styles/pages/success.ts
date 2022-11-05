@@ -35,6 +35,10 @@ export const SuccessContainer = styled('main', {
       color: '$green300',
     }
   },
+
+  '@media (max-width: 600px)': {
+    padding: '0 2rem',
+  },
 })
 
 export const ProductsContainer = styled('div', {

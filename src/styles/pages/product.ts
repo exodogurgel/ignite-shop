@@ -9,7 +9,11 @@ export const ProductContainer = styled('main', {
 
   display: 'flex',
   gap: '4.5rem',
-  alignItems: 'stretch'
+  alignItems: 'stretch',
+
+  '@media (max-width: 600px)': {
+    flexDirection: 'column',
+  },
 })
 
 export const ImageContainer = styled('div', {
@@ -23,7 +27,8 @@ export const ImageContainer = styled('div', {
 
   img: {
     objectFit: 'cover',
-  }
+    width: '100%',
+  },
 })
 
 export const ProductDetails = styled('div', {

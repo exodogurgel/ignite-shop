@@ -10,6 +10,10 @@ export const HomeContainer = styled('main', {
   '> div': {
     '&:first-child': {
       marginLeft: '-12rem',
+
+      '@media (max-width: 600px)': {
+        marginLeft: 0,
+      },
     }
   }
 })
@@ -50,6 +54,11 @@ export const Product = styled('div', {
     transform: 'translateY(110%)',
     opacity: 0,
     transition: 'all 0.2s ease-in-out',
+
+    '@media (max-width: 600px)': {
+      transform: 'translateY(0%)',
+      opacity: 1,
+    },
 
     div: {
       display: 'flex',
@@ -113,6 +122,10 @@ export const ArrowButton = styled('button', {
   fill: "$white",
   padding: "0 1rem",
 
+  '@media (max-width: 600px)': {
+    display: 'none',
+  },
+
   'svg:hover': {
     transform: "scale(1.1)",
     transition: "all 0.2s"
@@ -138,4 +151,5 @@ export const ArrowButton = styled('button', {
           },
       },
   },
+
 })
