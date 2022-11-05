@@ -67,13 +67,11 @@ export default function ShoppingBag () {
               <div>
                 <h4>{cartItem.name}</h4>
                 <strong>
-                  {
-                    formatCurrencyString(
-                      {
-                        value: cartItem.price,
-                        currency: cartItem.currency
-                      }
-                    )
+                  { 
+                    new Intl.NumberFormat('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    }).format(cartItem.price / 100)
                   }
                 </strong>
                 <button onClick={() => handleRemoveItem(cartItem.id)}>Remover</button>

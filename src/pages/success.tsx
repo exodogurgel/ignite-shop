@@ -7,7 +7,7 @@ import { stripe } from "../lib/stripe";
 import Stripe from "stripe";
 import Head from "next/head";
 import { useShoppingCart } from "use-shopping-cart"
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface SuccessProps {
   customerName: string

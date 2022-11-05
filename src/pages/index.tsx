@@ -3,6 +3,7 @@ import { useKeenSlider } from 'keen-slider/react'
 import 'keen-slider/keen-slider.min.css'
 
 import { useShoppingCart } from "use-shopping-cart"
+import { Product as IProduct } from "use-shopping-cart/core"
 
 import Image from "next/image";
 import { useState } from "react";
@@ -19,22 +20,27 @@ interface ArrowProps {
   onClick: (e: any) => void
 }
 
+interface Product {
+  id: string
+  name: string
+  imageUrl: string
+  price: number
+  defaultPriceId: string
+  priceInCents: number
+  currency: "BRL"
+}
+
 interface HomeProps {
-  products: {
-    id: string
-    name: string
-    imageUrl: string
-    price: string
-    defaultPriceId: string
-    priceInCents: number
-  }[]
+  products: Product[]
 }
 
 export default function Home({ products }: HomeProps) {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [loaded, setLoaded] = useState(false)
 
-  const { addItem } = useShoppingCart()
+  const { addItem, cartDetails } = useShoppingCart()
+
+  const cart = Object.values(cartDetails ?? {}).map((cartItem: IProduct) => cartItem)
 
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
     slides: {
@@ -75,6 +81,27 @@ export default function Home({ products }: HomeProps) {
     );
   }
 
+  async function handleAddProductToCart(product: Product) {
+    const {id, name, imageUrl, priceInCents, defaultPriceId, currency} = product
+    try {
+      if (cart.find(item => item.id === product.id)) {
+        return alert("Esse produto ja está no carrinho")
+      }
+
+      addItem({
+        id,
+        name,
+        imageUrl,
+        price: priceInCents,
+        price_id: defaultPriceId,
+        currency
+      })
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <>
       <Head>
@@ -101,16 +128,7 @@ export default function Home({ products }: HomeProps) {
                     <span>{product.price}</span>
                   </div>
                   <button
-                    onClick={() => {
-                      addItem({
-                        id: product.id,
-                        name: product.name,
-                        imageUrl: product.imageUrl,
-                        price: product.priceInCents,
-                        price_id: product.defaultPriceId,
-                        currency: "BRL"
-                      })
-                    }}
+                    onClick={() => handleAddProductToCart(product)}
                   >
                     <Handbag size={32} weight="bold"
                   /> </button>

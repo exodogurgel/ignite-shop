@@ -11,8 +11,10 @@ import { useShoppingCart, formatCurrencyString } from "use-shopping-cart";
 import { Product as IProduct } from "use-shopping-cart/core"
 
 export default function Product({ product }: IProduct) {
-  const [isAddedItemToCart, setIsisAddedItemToCart] = useState(false)
-  const { addItem } = useShoppingCart()
+  const [isAddedItemToCart, setIsAddedItemToCart] = useState(false)
+  const { addItem, cartDetails,  } = useShoppingCart()
+
+  const cart = Object.values(cartDetails ?? {}).map((cartItem: IProduct) => cartItem)
 
   const { isFallback } = useRouter()
   
@@ -21,10 +23,20 @@ export default function Product({ product }: IProduct) {
   }
 
   async function handleAddProductToCart() {
-    setIsisAddedItemToCart(true)
+    try {
+      setIsAddedItemToCart(true)
 
-    addItem(product)
-    setIsisAddedItemToCart(false)
+      if (cart.find(item => item.id === product.id)) {
+        return alert("Esse produto ja está no carrinho")
+      }
+
+      addItem(product)
+
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsAddedItemToCart(false)
+    }
   }
 
   return (
