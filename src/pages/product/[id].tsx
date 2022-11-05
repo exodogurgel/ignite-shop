@@ -1,14 +1,19 @@
-import { ImageContainer, ProductContainer, ProductDetails } from "../../styles/pages/product";
+import { useState } from "react";
 
-import Image from "next/image";
 import { GetStaticPaths, GetStaticProps } from "next";
+import { useRouter } from "next/router";
+import Image from "next/image";
+import Head from "next/head";
+
 import { stripe } from "../../lib/stripe";
 import Stripe from "stripe";
-import { useRouter } from "next/router";
-import { useState } from "react";
-import Head from "next/head";
+
 import { useShoppingCart, formatCurrencyString } from "use-shopping-cart";
 import { Product as IProduct } from "use-shopping-cart/core"
+
+import { toast } from 'react-hot-toast';
+
+import { ImageContainer, ProductContainer, ProductDetails } from "../../styles/pages/product";
 
 export default function Product({ product }: IProduct) {
   const [isAddedItemToCart, setIsAddedItemToCart] = useState(false)
@@ -27,13 +32,17 @@ export default function Product({ product }: IProduct) {
       setIsAddedItemToCart(true)
 
       if (cart.find(item => item.id === product.id)) {
-        return alert("Esse produto ja está no carrinho")
+        return toast.error(`A ${product.name} já está no carrinho!`)
       }
 
       addItem(product)
 
+      toast.success(`${product.name} adicionada ao carrinho`)
+
     } catch (error) {
       console.log(error)
+
+      toast.error(`Não foi possível adicionar ao carrinho, tente novamente!`)
     } finally {
       setIsAddedItemToCart(false)
     }

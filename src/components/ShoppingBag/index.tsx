@@ -1,12 +1,15 @@
-import * as Dialog from '@radix-ui/react-dialog'
-import { X } from 'phosphor-react'
-import { Close, Content, ImageContainer, Item, ItemsContainer, Title, } from './styles'
-import Image from 'next/image'
-import axios from "axios";
-
-import { useShoppingCart, formatCurrencyString } from 'use-shopping-cart'
-import { Product as IProduct } from "use-shopping-cart/core"
 import { useState } from 'react'
+import Image from 'next/image'
+import { X } from 'phosphor-react'
+
+import axios from "axios";
+import * as Dialog from '@radix-ui/react-dialog'
+
+import { useShoppingCart, } from 'use-shopping-cart'
+import { Product as IProduct } from "use-shopping-cart/core"
+
+import { toast } from 'react-hot-toast';
+import { Close, Content, ImageContainer, Item, ItemsContainer, Title, } from './styles'
 
 export default function ShoppingBag () {
   const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] = useState(false)
@@ -19,6 +22,7 @@ export default function ShoppingBag () {
 
   function handleRemoveItem (id: string) {
     removeItem(id)
+    toast.success("Camiseta removida com sucesso!")
   }
 
   async function handleBuyProducts() {

@@ -1,18 +1,21 @@
-import { ArrowButton, HomeContainer, Product } from "../styles/pages/home";
+import { useState } from "react";
+import { Handbag } from "phosphor-react";
 import { useKeenSlider } from 'keen-slider/react'
-import 'keen-slider/keen-slider.min.css'
+
+import { GetStaticProps } from "next";
+import Image from "next/image";
+import Link from "next/link";
+import Head from "next/head";
+
+import Stripe from "stripe";
+import { stripe } from "../lib/stripe";
 
 import { useShoppingCart } from "use-shopping-cart"
 import { Product as IProduct } from "use-shopping-cart/core"
 
-import Image from "next/image";
-import { useState } from "react";
-import { GetStaticProps } from "next";
-import { stripe } from "../lib/stripe";
-import Stripe from "stripe";
-import Link from "next/link";
-import Head from "next/head";
-import { Handbag } from "phosphor-react";
+import { toast } from 'react-hot-toast';
+
+import { ArrowButton, HomeContainer, Product } from "../styles/pages/home";
 
 interface ArrowProps {
   left?: boolean
@@ -83,9 +86,10 @@ export default function Home({ products }: HomeProps) {
 
   async function handleAddProductToCart(product: Product) {
     const {id, name, imageUrl, priceInCents, defaultPriceId, currency} = product
+
     try {
       if (cart.find(item => item.id === product.id)) {
-        return alert("Esse produto ja está no carrinho")
+        return toast.error(`A ${name} já está no carrinho!`)
       }
 
       addItem({
@@ -97,8 +101,12 @@ export default function Home({ products }: HomeProps) {
         currency
       })
 
+      toast.success(`${name} adicionada ao carrinho`)
+
     } catch (error) {
       console.log(error)
+
+      toast.error(`Não foi possível adicionar ao carrinho, tente novamente!`)
     }
   }
 
