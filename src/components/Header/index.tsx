@@ -6,13 +6,16 @@ import { Handbag } from "phosphor-react"
 import * as Dialog from '@radix-ui/react-dialog'
 import ShoppingBag from "../ShoppingBag"
 import { useShoppingCart } from "use-shopping-cart"
+import Link from "next/link"
 
 export default function Header () {
   const { cartCount } = useShoppingCart()
   
   return (
     <HeaderContainer>
-      <Image src={logoImg} alt="" />
+      <Link href="/">
+        <Image src={logoImg} alt="" />
+      </Link>
       
        <Dialog.Root>
         <BagContainer>
